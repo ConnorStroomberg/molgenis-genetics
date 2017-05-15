@@ -11,6 +11,7 @@ export const SET_GENE_NETWORK_SCORES = '__SET_GENE_NETWORK_SCORES__'
 export const REMOVE_GENE_NETWORK_SCORES = '__REMOVE_GENE_NETWORK_SCORES__'
 export const UPDATE_VARIANT_SCORES = '__UPDATE_VARIANT_SCORES__'
 export const CLEAR_GENE_NETWORK_SCORES = '__CLEAR_GENE_NETWORK_SCORES__'
+export const SET_WARM_UP_DONE = '___SET_WARM_UP_DONE__'
 
 export default {
   /**
@@ -157,6 +158,13 @@ export default {
    */
   [CLEAR_GENE_NETWORK_SCORES] (state) {
     state.geneNetworkScores = {}
+  },
+  /**
+   *
+   * @param state
+   */
+  [SET_WARM_UP_DONE] (state) {
+    state.isWarmUp = false
   }
 
 }

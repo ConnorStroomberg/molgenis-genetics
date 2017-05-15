@@ -194,6 +194,7 @@ describe('actions', () => {
     const state = {
       session: {server: {apiUrl: '/api'}},
       token: 'TOKEN',
+      isWarmUp: false,
       matrixEntityId: matrixEntityId,
       variants: [
         {Gene_Name: 'Gene1'},

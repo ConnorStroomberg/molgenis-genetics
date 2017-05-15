@@ -1,5 +1,5 @@
 import { get, login, submitForm } from '../molgenisApi'
-import { CREATE_ALERT, REMOVE_ALERT, SET_VARIANTS, SET_PATIENT_TABLES, SET_TOKEN, UPDATE_JOB, UPDATE_JOB_HREF, SET_GENE_NETWORK_SCORES, UPDATE_VARIANT_SCORES } from './mutations'
+import { CREATE_ALERT, REMOVE_ALERT, SET_VARIANTS, SET_PATIENT_TABLES, SET_TOKEN, UPDATE_JOB, UPDATE_JOB_HREF, SET_GENE_NETWORK_SCORES, UPDATE_VARIANT_SCORES, SET_WARM_UP_DONE } from './mutations'
 
 export const GET_PATIENT = '__GET_PATIENT__'
 export const IMPORT_FILE = '__IMPORT_FILE__'
@@ -115,6 +115,10 @@ export default {
       return variant.Gene_Name
     }).toString()
 
+    if (state.isWarmUp) {
+      commit(CREATE_ALERT, {'message': 'Initializing the matrix, please wait... ', 'type': 'info'})
+    }
+
     get(state.session.server, '/matrix/' + matrixEntityId + '/valueByNames?rows=' +
       rows + '&columns=' + phenotypeFilter.id, state.token)
       .then(response => {
@@ -122,9 +126,18 @@ export default {
         commit(UPDATE_VARIANT_SCORES)
         commit(REMOVE_ALERT)
       }).catch((error) => {
+        commit(REMOVE_ALERT)
         if (error.errors === undefined) {
+          if (state.isWarmUp) {
+            commit(REMOVE_ALERT)
+            commit(CREATE_ALERT, {'message': 'Matrix initialized ', 'type': 'success'})
+            commit(SET_WARM_UP_DONE)
+            // suppress warning message
+            return
+          }
           commit(CREATE_ALERT, {'message': 'No scores were found for ' + phenotypeFilter.label, 'type': 'danger'})
         } else {
+          console.log('its a error other  ')
           commit(CREATE_ALERT, {'message': error.errors[0].message, 'type': 'warning'})
         }
       })

@@ -26,6 +26,7 @@ describe('PhenotypeSelectionContainer', () => {
       const b = {
         totalScore: 2
       }
+
       const result = PhenotypeSelectionContainer.methods.sortVariants(a, b)
       expect(result).to.equal(-2)
     })

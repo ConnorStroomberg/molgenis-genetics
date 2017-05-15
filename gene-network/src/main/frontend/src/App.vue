@@ -49,7 +49,7 @@
 
 <script>
   import AlertContainer from './components/AlertContainer'
-  import { FETCH_PATIENT_TABLES } from './store/actions'
+  import { FETCH_PATIENT_TABLES, COMPUTE_SCORE } from './store/actions'
 
   export default {
     name: 'molgenis-app',
@@ -76,6 +76,9 @@
     },
     created: function () {
       this.$store.dispatch(FETCH_PATIENT_TABLES)
+
+      // warm up the matrix
+      this.$store.dispatch(COMPUTE_SCORE, [], true)
     }
   }
 </script>
